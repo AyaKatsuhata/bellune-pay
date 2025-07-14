@@ -1,3 +1,4 @@
+export const runtime = "nodejs";
 import { NextResponse } from "next/server";
 import * as line from "@line/bot-sdk";
 import OpenAI from "openai";
