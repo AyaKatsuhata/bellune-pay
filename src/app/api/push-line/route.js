@@ -1,3 +1,5 @@
+export const runtime = "nodejs";
+export const dynamic = "force-dynamic";
 import { Client } from "@line/bot-sdk";
 
 export const runtime = "edge";
