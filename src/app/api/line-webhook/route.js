@@ -3,6 +3,8 @@ import { NextResponse } from "next/server";
 import * as line from "@line/bot-sdk";
 import OpenAI from "openai";
 
+console.log("API KEY:", process.env.OPENAI_API_KEY);
+
 const client = new line.Client({
   channelAccessToken: process.env.LINE_CHANNEL_ACCESS_TOKEN,
 });
