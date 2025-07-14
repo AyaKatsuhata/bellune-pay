@@ -1,19 +1,19 @@
 export const runtime = "nodejs";
+export const dynamic = "force-dynamic";
+
 import { NextResponse } from "next/server";
 import * as line from "@line/bot-sdk";
 import OpenAI from "openai";
-
-console.log("API KEY:", process.env.OPENAI_API_KEY);
 
 const client = new line.Client({
   channelAccessToken: process.env.LINE_CHANNEL_ACCESS_TOKEN,
 });
 
-const openai = new OpenAI({
-  apiKey: process.env.OPENAI_API_KEY,
-});
-
 export async function POST(req) {
+  const openai = new OpenAI({
+    apiKey: process.env.OPENAI_API_KEY,
+  });
+
   const rawBody = await req.text();
   const signature = req.headers.get("x-line-signature");
 
