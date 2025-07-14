@@ -1,8 +1,7 @@
 export const runtime = "nodejs";
 export const dynamic = "force-dynamic";
-import { Client } from "@line/bot-sdk";
 
-export const runtime = "edge";
+import { Client } from "@line/bot-sdk";
 
 export async function POST(req) {
   const body = await req.json();
