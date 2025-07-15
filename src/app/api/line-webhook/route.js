@@ -10,6 +10,7 @@ const client = new line.Client({
 });
 
 export async function POST(req) {
+  console.log("LINE webhook received!");
   const openai = new OpenAI({
     apiKey: process.env.OPENAI_API_KEY,
   });
@@ -37,7 +38,7 @@ export async function POST(req) {
         const userId = event.source.userId;
 
         const completion = await openai.chat.completions.create({
-          model: "gpt-4o",
+          model: "gpt-3.5-turbo",
           messages: [
             { role: "system", content: "あなたは占い師です。" },
             { role: "user", content: userMessage },
