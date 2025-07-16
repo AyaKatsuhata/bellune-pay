@@ -1,18 +1,23 @@
 "use client";
 
-import { useSearchParams } from "next/navigation";
+import { useEffect } from "react";
 
 export default function SuccessPageInner() {
-  const searchParams = useSearchParams();
-  const sessionId = searchParams.get("session_id");
+  const liffUrl = process.env.NEXT_PUBLIC_LIFF_URL;
+
+  useEffect(() => {
+    if (liffUrl) {
+      window.location.href = liffUrl;
+    }
+  }, [liffUrl]);
 
   return (
-    <div style={{ padding: "2rem" }}>
+    <div style={{ padding: "2rem", textAlign: "center" }}>
       <h1>決済が完了しました！</h1>
-      <p>Session ID: {sessionId}</p>
+      <p>自動でLINE連携に進みます。<br />数秒お待ちください。</p>
 
       <a
-        href="https://line.me/R/ti/p/U0bbb2ad3b6ea1da17a2c5c21bc2a03a3"
+        href={liffUrl}
         style={{
           display: "inline-block",
           marginTop: "20px",
@@ -21,9 +26,10 @@ export default function SuccessPageInner() {
           color: "white",
           borderRadius: "4px",
           textDecoration: "none",
+          fontWeight: "bold",
         }}
       >
-        LINEで占い結果を受け取る
+        LINE連携はこちら
       </a>
     </div>
   );
