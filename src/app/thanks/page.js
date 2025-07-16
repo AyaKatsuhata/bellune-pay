@@ -8,7 +8,7 @@ export default function ThanksPage() {
         以下のボタンからLINEアカウントを
         友だち追加してください。
       </p>
-      <a href="https://lin.ee/AEdeUms"><img src="https://scdn.line-apps.com/n/line_add_friends/btn/ja.png" alt="友だち追加" height="36" border="0"></a>
+      <a href="https://lin.ee/AEdeUms"><img src="https://scdn.line-apps.com/n/line_add_friends/btn/ja.png" alt="友だち追加" height="36" border="0"/></a>
     </main>
   );
 }
