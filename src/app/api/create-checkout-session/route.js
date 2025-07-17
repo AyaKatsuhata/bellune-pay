@@ -2,19 +2,14 @@ import Stripe from "stripe";
 
 export async function POST() {
   const stripe = new Stripe(process.env.STRIPE_SECRET_KEY);
-
   const YOUR_DOMAIN = process.env.NEXT_PUBLIC_BASE_URL || 'http://localhost:3000';
 
   try {
     const session = await stripe.checkout.sessions.create({
-      customer_email_collection: {
-         enabled: true
-      },
-      payment_method_types: ['card'],
       mode: 'subscription',
       line_items: [
         {
-          price: process.env.STRIPE_PRICE_ID, 
+          price: process.env.STRIPE_PRICE_ID,
           quantity: 1,
         },
       ],
@@ -24,17 +19,13 @@ export async function POST() {
 
     return new Response(JSON.stringify({ url: session.url }), {
       status: 200,
-      headers: {
-        "Content-Type": "application/json",
-      },
+      headers: { "Content-Type": "application/json" },
     });
   } catch (err) {
-    console.error(err);
+    console.error("Stripe error:", err);
     return new Response(JSON.stringify({ error: err.message }), {
       status: 500,
-      headers: {
-        "Content-Type": "application/json",
-      },
+      headers: { "Content-Type": "application/json" },
     });
   }
 }
