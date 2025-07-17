@@ -4,6 +4,8 @@ export async function POST() {
   const stripe = new Stripe(process.env.STRIPE_SECRET_KEY);
   const YOUR_DOMAIN = process.env.NEXT_PUBLIC_BASE_URL || 'http://localhost:3000';
 
+  console.log("✅ PRICE_ID:", priceId);
+  console.log("✅ BASE_URL:", YOUR_DOMAIN);
   try {
     const session = await stripe.checkout.sessions.create({
       mode: 'subscription',
@@ -17,6 +19,7 @@ export async function POST() {
       cancel_url: `${YOUR_DOMAIN}/cancel`,
     });
 
+    console.log("✅ Created Stripe session:", session);
     return new Response(JSON.stringify({ url: session.url }), {
       status: 200,
       headers: { "Content-Type": "application/json" },
