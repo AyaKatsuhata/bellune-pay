@@ -3,6 +3,7 @@ import Stripe from "stripe";
 export async function POST() {
   const stripe = new Stripe(process.env.STRIPE_SECRET_KEY);
   const YOUR_DOMAIN = process.env.NEXT_PUBLIC_BASE_URL || 'http://localhost:3000';
+  console.log("✅ PRICE_ID:", process.env.STRIPE_PRICE_ID);
 
   try {
     const session = await stripe.checkout.sessions.create({
