@@ -14,7 +14,7 @@ export async function POST() {
       mode: 'subscription',
       line_items: [
         {
-          price: 'price_1RiVHaE4nSBGPceX69p0uC7S', 
+          price: process.env.STRIPE_PRICE_ID, 
           quantity: 1,
         },
       ],
