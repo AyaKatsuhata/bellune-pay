@@ -62,7 +62,7 @@ async function handleCheckoutCompleted(session) {
   console.log("Processing checkout.session.completed:", session.id);
   console.log("✅ Session:", session);
 
-  const email = session.customer_email;
+  const email = session.customer_email || session.customer_details?.email;
   const stripeCustomerId = session.customer;
   const stripeSubscriptionId = session.subscription;
 
