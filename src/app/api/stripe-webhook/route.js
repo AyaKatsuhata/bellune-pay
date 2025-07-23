@@ -60,6 +60,7 @@ export async function POST(req) {
 
 async function handleCheckoutCompleted(session) {
   console.log("Processing checkout.session.completed:", session.id);
+  console.log("✅ Session:", session);
 
   const email = session.customer_email;
   const stripeCustomerId = session.customer;
