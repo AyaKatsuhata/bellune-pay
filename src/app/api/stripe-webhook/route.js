@@ -14,11 +14,6 @@ const supabase = createClient(
   process.env.SUPABASE_SERVICE_ROLE_KEY
 );
 
-// LINE SDK 初期化
-const lineClient = new line.Client({
-  channelAccessToken: process.env.LINE_CHANNEL_ACCESS_TOKEN,
-});
-
 export async function POST(req) {
   try {
     const rawBody = await req.text();
