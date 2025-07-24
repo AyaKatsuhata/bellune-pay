@@ -1,7 +1,6 @@
 import { NextResponse } from "next/server";
 import Stripe from "stripe";
 import { createClient } from "@supabase/supabase-js";
-import * as line from "@line/bot-sdk";
 
 export const runtime = "nodejs";
 
