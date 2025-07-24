@@ -18,7 +18,6 @@ export async function POST() {
       cancel_url: `${YOUR_DOMAIN}/cancel`,
     });
 
-    console.log("✅ BASE_URL:", YOUR_DOMAIN);
     console.log("✅ Created Stripe session:", session);
     return new Response(JSON.stringify({ url: session.url }), {
       status: 200,

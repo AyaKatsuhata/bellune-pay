@@ -66,6 +66,11 @@ async function handleCheckoutCompleted(session) {
   const stripeCustomerId = session.customer;
   const stripeSubscriptionId = session.subscription;
 
+  if (!email) {
+    console.error("❌ Stripe session に email が含まれていません");
+    return;
+  }
+
   // Supabaseで該当ユーザを検索
   let { data: user, error } = await supabase
     .from("users")
@@ -132,30 +137,6 @@ async function handleCheckoutCompleted(session) {
       return;
     }
     console.log("✅ Subscription history inserted");
-  }
-
-  // LINE IDが登録済みの場合は決済お礼メッセージを送る
-  const { data: updatedUser } = await supabase
-    .from("users")
-    .select("line_id")
-    .eq("id", userId)
-    .single();
-
-  if (updatedUser?.line_id) {
-    try {
-      await lineClient.pushMessage(
-        updatedUser.line_id,
-        {
-          type: "text",
-          text: "決済ありがとうございます！有料会員になりました！",
-        }
-      );
-      console.log("✅ LINE message sent to user:", updatedUser.line_id);
-    } catch (err) {
-      console.error("LINE push error:", err);
-    }
-  } else {
-    console.log("ℹ️ No LINE ID found for user:", userId);
   }
 }
 
