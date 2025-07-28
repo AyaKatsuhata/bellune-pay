@@ -11,6 +11,10 @@ export async function POST(req) {
     const body = await req.json();
     const { lineId, displayName, email } = body;
 
+    console.log("✅ lineId:", lineId);
+    console.log("✅ displayName:", displayName);
+    console.log("✅ email:", email);
+    
     if (!lineId || !displayName) {
       return NextResponse.json(
         { error: "Missing lineId or displayName" },

@@ -8,6 +8,7 @@ export default function LineLiffEntryPage() {
   useEffect(() => {
     const liffId = process.env.NEXT_PUBLIC_LIFF_ID;
     console.log("🔍 LIFF ID:", liffId);
+    console.log("🔍 email:", localStorage.getItem("email"));
 
     const loadLiff = async () => {
       try {
