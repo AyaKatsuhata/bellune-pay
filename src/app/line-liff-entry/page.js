@@ -7,11 +7,13 @@ export default function LineLiffEntryPage() {
 
   useEffect(() => {
     const liffId = process.env.NEXT_PUBLIC_LIFF_ID;
+    console.log("🔍 LIFF ID:", liffId);
 
     const loadLiff = async () => {
       try {
         const liff = (await import("@line/liff")).default;
         await liff.init({ liffId });
+        console.log("⏳ LIFF import OK");
 
         if (!liff.isLoggedIn()) {
           liff.login();
@@ -21,6 +23,7 @@ export default function LineLiffEntryPage() {
         let profile;
         try {
           profile = await liff.getProfile();
+          console.log("✅ Got profile:", profile);
           if (!profile?.userId) {
             throw new Error("LINE profile not found");
           }
@@ -30,7 +33,7 @@ export default function LineLiffEntryPage() {
           return;
         }
 
-        const res = await fetch("/api/link-line-user", {
+        const res = await fetch("/api/line-liff-entry", {
           method: "POST",
           headers: {
             "Content-Type": "application/json",
