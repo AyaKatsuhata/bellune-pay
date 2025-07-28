@@ -14,7 +14,7 @@ export async function POST(req) {
     console.log("✅ lineId:", lineId);
     console.log("✅ displayName:", displayName);
     console.log("✅ email:", email);
-    
+
     if (!lineId || !displayName) {
       return NextResponse.json(
         { error: "Missing lineId or displayName" },
@@ -26,7 +26,7 @@ export async function POST(req) {
     const { data: existingUser, error: findError } = await supabase
       .from("users")
       .select("id")
-      .eq("line_id", lineId)
+      .eq("email", email)
       .maybeSingle();
 
     if (findError) {
