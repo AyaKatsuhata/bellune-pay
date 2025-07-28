@@ -8,7 +8,7 @@ export default function LineLiffEntryPage() {
   useEffect(() => {
     const liffId = process.env.NEXT_PUBLIC_LIFF_ID;
     console.log("🔍 LIFF ID:", liffId);
-    console.log("🔍 email:", localStorage.getItem("email"));
+    console.log("🔍 email:", sessionStorage.getItem("email"));
 
     const loadLiff = async () => {
       try {
@@ -34,7 +34,7 @@ export default function LineLiffEntryPage() {
           return;
         }
 
-        const email = localStorage.getItem("email");
+        const email = sessionStorage.getItem("email");
         const res = await fetch("/api/line-liff-entry", {
           method: "POST",
           headers: {
