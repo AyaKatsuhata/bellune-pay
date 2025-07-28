@@ -33,6 +33,7 @@ export default function LineLiffEntryPage() {
           return;
         }
 
+        const email = localStorage.getItem("email");
         const res = await fetch("/api/line-liff-entry", {
           method: "POST",
           headers: {
@@ -41,6 +42,7 @@ export default function LineLiffEntryPage() {
           body: JSON.stringify({
             lineId: profile.userId,
             displayName: profile.displayName,
+            email: email,
           }),
         });
 
