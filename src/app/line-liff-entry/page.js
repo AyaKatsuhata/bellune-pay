@@ -29,7 +29,7 @@ export default function LineLiffEntryPage() {
           }
         } catch (err) {
           console.error("Profile fetch error", err);
-          window.location.href = "/line-login-fallback";
+          // window.location.href = "/line-login-fallback";
           return;
         }
 
@@ -48,11 +48,11 @@ export default function LineLiffEntryPage() {
           window.location.href = "/thanks";
         } else {
           console.error("API error", await res.text());
-          window.location.href = "/line-login-fallback";
+          // window.location.href = "/line-login-fallback";
         }
       } catch (err) {
         console.error("LIFF error:", err);
-        window.location.href = "/line-login-fallback";
+        // window.location.href = "/line-login-fallback";
       } finally {
         setLoading(false);
       }
