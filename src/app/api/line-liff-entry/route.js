@@ -35,7 +35,7 @@ export async function POST(req) {
       const { error: updateError } = await supabase
         .from("users")
         .update({
-          display_name: displayName,
+          nickname: displayName,
           updated_at: new Date(),
         })
         .eq("id", existingUser.id);
@@ -52,7 +52,7 @@ export async function POST(req) {
     // 新規ユーザー → email を含めて保存
     const { error: insertError } = await supabase.from("users").insert({
       line_id: lineId,
-      display_name: displayName,
+      nickname: displayName,
       email: email || null,
       fortune_type: null,
       fortune_number: null,
