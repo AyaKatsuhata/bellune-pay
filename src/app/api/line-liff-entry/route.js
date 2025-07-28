@@ -39,6 +39,7 @@ export async function POST(req) {
       const { error: updateError } = await supabase
         .from("users")
         .update({
+          line_id: lineId,
           nickname: displayName,
           updated_at: new Date(),
         })
