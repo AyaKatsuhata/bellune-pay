@@ -1,0 +1,439 @@
+    body {
+      margin: 0;
+      font-family: "Noto Sans JP", "Hiragino Kaku Gothic ProN", "M PLUS Rounded 1c", sans-serif;
+      background: #fff;
+      color: #333;
+    }
+    /*  --- 共通レイアウト --- */
+    .wrapper{
+      max-width:1200px;
+      margin:auto;
+      padding:0 4%;
+    }
+
+    .wrapper.nav {
+      display: flex;
+      align-items: center;
+      height: 100%;
+    }
+    header{
+      padding: 12px 0;
+      position:sticky;
+      top:0;
+      z-index:999;
+      background:#B6D3FF;
+      box-shadow:0 2px 8px rgba(0,0,0,.05);
+    }
+    .logo{
+      font-family: 'Lobster', cursive;
+      font-weight: 700;
+      font-size: 1.4rem;
+      letter-spacing: .1em;
+      font-size: 28px;
+      color: #ffffff;
+      margin: 0;
+    }
+
+    /* Main占い結果 */
+    .main {
+      /* max-width: 640px; */
+      /* margin: 20px auto; */
+      background: #ffffff;
+      padding: 50px 0 100px 0;
+      /* border-radius: 8px;
+      box-shadow: 0 0 10px rgba(0,0,0,0.1); */
+    }
+
+    .result-type {
+      font-size: 38px;
+      font-weight:700;
+      color: #d77f4b;
+      text-align: center;
+      margin-bottom: 30px;
+    }
+
+    .image-container {
+      text-align: center;
+      margin-bottom: 30px;
+    }
+
+    .image-container img {
+      max-width: 300px;
+      border-radius: 50%;
+    }
+
+    .description-box {
+      max-width: 800px;
+      margin: 80px auto 0 auto;
+    }
+
+    .description {
+      font-size: 0.9rem;
+      letter-spacing: 1.12px;
+      line-height: 24.78px;
+      margin-top: 30px;
+      margin-bottom: 70px;
+      padding: 0 30px 0 30px;
+    }
+
+    .section-heading {
+      display: table;
+      margin-left: auto;
+      margin-right: auto;
+      background-color: #f48da4;
+      color: #ffffff;
+      font-size: 22px;
+      font-weight: 600;
+      letter-spacing: .15em;
+      padding: 6px 18px;
+      border-radius: 3px;
+    }
+
+    @media (max-width: 767px) {
+      .section-heading {
+        font-size: 18px;
+        padding: 4px 12px;
+      }
+    }
+
+    /*  --- バナー --- */
+    .banner {
+      background: url("../images/background-6.png") center/cover no-repeat;
+      padding: 3rem 0 3rem 0;
+      text-align: center;
+      max-width: 1200px;
+      margin: 0 auto 100px auto;
+      border-radius: 20px;
+      overflow: hidden;
+    }
+
+    .banner-header h2 {
+      margin: 0 0 20px 0;
+      font-size: 32px;
+      display: flex;
+      align-items: baseline;
+      gap: 12px;
+    }
+
+    .banner-header .en {
+      font-family: 'Lobster', cursive;
+      font-size: 48px;
+      color: #000;
+      letter-spacing: .03em;
+    }
+
+    .banner-header .ja {
+      font-weight: bold;
+      color: #333;
+      font-size: 18px;
+    }
+
+    @media (max-width: 767px) {
+      .banner-header .en {
+        font-size: 36px;
+        letter-spacing: 0;
+      }
+      .banner-header .ja {
+        font-size: 16px;
+      }
+    }
+
+    .banner-carousel {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 500px;
+    }
+
+    .banner-items {
+      display: flex;
+      gap: 120px;
+      list-style: none;
+      padding: 0;
+      margin: 0;
+      flex-wrap: nowrap;
+    }
+
+    .banner-items li {
+    text-align: center;
+    width: 50%;
+    box-sizing: border-box;
+    }
+
+    .banner-items img {
+      margin: 0 auto;
+      width: 350px;
+      height: 270px;
+      object-fit: cover;
+      border-radius: 90% 90% 90% 90% / 90% 90% 90% 90%;
+      background: #fff;
+    }
+
+    .banner-items p {
+      margin-top: 30px;
+      font-size: 24px;
+      font-weight: bold;
+      color: #333;
+    }
+
+    /* ===== Responsive: Banner carousel stacking on mobile ===== */
+    @media (max-width: 767px) {
+      .banner-carousel {
+        flex-direction: column;
+        height: auto;
+        gap: 30px;
+      }
+
+      .banner-items {
+        flex-direction: column;
+        align-items: center;
+        gap: 40px;
+      }
+
+      .banner-items li {
+        width: 100%;
+      }
+
+      .banner-items img {
+        width: 300px;
+        height: 250px;
+      }
+
+      .banner-items p {
+        font-size: 18px;
+      }
+
+    }
+
+    .grid-box {
+      background-color: #fff;
+      border-radius: 20px;
+      padding: 40px;
+      margin: 40px auto;
+      max-width: 1120px;
+      position: relative;
+    
+      /* グリッド背景 */
+      background-image:
+        linear-gradient(to right, #ddd 1px, transparent 1px),
+        linear-gradient(to bottom, #ddd 1px, transparent 1px);
+      background-size: 40px 40px;
+    
+      box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+    }
+
+    .step-item {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+      margin-bottom: 24px;
+    }
+
+    .step-label {
+      display: flex;
+      /* display: inline-flex; */
+      align-items: center;
+      justify-content: center;
+      font-size: 14px;
+      font-weight: bold;
+      border: 2px solid #000;
+      border-radius: 50%;
+      width: 40px;
+      height: 40px;
+      /* text-align: center; */
+      background: white;
+      box-shadow: 5px 5px 0 #fce36d;
+      /* margin-bottom: 20px; */
+      margin-right: 8px;
+      flex-shrink: 0;
+    }
+
+    .step-text {
+      font-size: 16px;
+      line-height: 1.8;
+    }
+
+    .grid-description {
+      font-size: 16px;
+      line-height: 1.8;
+      color: #333;
+      margin-top: 20px;
+    }
+
+    .grid-description p {
+      font-size: 18px;
+      font-weight: 400;
+      margin-top: 20px;
+      margin-bottom: 40px;
+    }
+    @media (max-width: 767px) {
+      .step-text {
+        font-size: 15px;
+      }
+
+      .grid-description p {
+        font-size: 15px;
+        font-weight: 400;
+        margin-top: 20px;
+        margin-bottom: 40px;
+      }
+    }
+
+    .grid-description ul {
+      list-style: none;
+      padding-left: 0;
+      margin-top: 10px;
+      margin-bottom: 50px;
+    }
+
+    .grid-description li {
+      margin-bottom: 30px;
+      text-indent: -1em;
+    }
+
+    .grid-description-underline {
+      background: linear-gradient(transparent 60%, #f1b8c4 90%);
+      display: inline;
+      padding: 0 4px;
+    }
+
+    .subscription-btn {
+      text-decoration: none;
+      display: block;
+      text-align: center;
+      width: 240px;
+      margin: 40px auto 0 auto;
+      background: #9bc2fd;
+      color: #fff;
+      font-weight: bold;
+      padding: 1rem 2.4rem;
+      border-radius: 60px;
+      font-size: 1.1rem;
+      transition: .3s;
+    }
+    .subscription-btn:hover {opacity: .85;}
+
+.banner-header .en {
+  font-size: 40px;
+}
+.banner-header .jp {
+  font-size: 18px;
+}
+
+.grid-form {
+  background-color: #fff;
+  border-radius: 20px;
+  padding: 40px;
+  margin: 40px auto;
+  max-width: 1120px;
+  position: relative;
+
+  /* グリッド背景 */
+  background-image:
+    linear-gradient(to right, #ddd 1px, transparent 1px),
+    linear-gradient(to bottom, #ddd 1px, transparent 1px);
+  background-size: 40px 40px;
+
+  box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+}
+
+.birthdate-form {
+  margin: 40px 0 40px 0;
+}
+
+.form-label {
+  font-weight: bold;
+  font-size: 24px;
+  margin-bottom: 30px;
+  display: flex;
+  align-items: center;
+  gap: 18px;
+}
+
+.required-badge {
+  background: #f48da4;
+  color: #fff;
+  font-size: 14px;
+  font-weight: bold;
+  padding: 4px 12px;
+  border-radius: 20px;
+  border: 2px solid #000;
+}
+
+.birthdate-grid {
+  display: flex;
+  gap: 40px;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: flex-start;
+}
+
+.birth-select {
+  width: 100px;
+  padding: 10px 10px 10px 16px;
+  margin-right: 10px;
+  border: 2px solid #000;
+  border-radius: 6px;
+  text-align: left;
+  font-size: 18px;
+  appearance: none;
+  background-color: #fff;
+  background-image: url("data:image/svg+xml;charset=UTF-8,%3Csvg fill='black' viewBox='0 0 24 24' width='16' height='16' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M7 10l5 5 5-5z'/%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: right -2px center;
+  background-size: 28px;
+}
+
+.input-group {
+  display: flex;
+  align-items: center;
+  font-weight: bold;
+  font-size: 16px;
+}
+@media (max-width: 767px) {
+  .banner-header .en {
+    font-size: 30px;
+  }
+
+  .banner-header .jp {
+    font-size: 14px;
+  }
+
+  .grid-form {
+    padding: 20px;
+  }
+
+  .birthdate-grid {
+    flex-wrap: nowrap;
+    flex-direction: row;
+    gap: 12px;
+    justify-content: space-between;
+  }
+
+  .birth-select {
+    width: 80px;
+    font-size: 18px;
+    padding: 8px;
+    margin-right: 5px;
+  }
+
+  .input-group {
+    font-size: 14px;
+  }
+}
+
+.submit-btn {
+  text-decoration: none;
+  display: block;
+  text-align: center;
+  width: 240px;
+  margin: 40px auto 0 auto;
+  background: #f48da4;
+  color: #fff;
+  font-weight: bold;
+  padding: 1rem 2.4rem;
+  border-radius: 60px;
+  font-size: 1.1rem;
+  transition: .3s;
+}
+.submit-btn:hover {opacity: .85;}

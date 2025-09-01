@@ -1,5 +1,6 @@
 'use client'
 
+import '@/style/main.css'
 import { useEffect, useState } from 'react'
 import liff from '@line/liff'
 
@@ -9,7 +10,9 @@ export default function UserGuideForm() {
   const [loading, setLoading] = useState(true)
   const [formData, setFormData] = useState({
     name: '',
-    birthdate: '',
+    year: '',
+    month: '',
+    day: '',
     birthplace: '',
     birthtime: ''
   })
@@ -35,9 +38,17 @@ export default function UserGuideForm() {
   const handleSubmit = async (e) => {
     e.preventDefault()
 
+    const birthdate = `${formData.year}-${formData.month}-${formData.day}`
     const res = await fetch('/api/create-user-guide', {
       method: 'POST',
-      body: JSON.stringify({ lineId, displayName, ...formData }),
+      body: JSON.stringify({ 
+        lineId, 
+        displayName, 
+        name: formData.name, 
+        birthdate, 
+        birthplace: formData.birthplace, 
+        birthtime: formData.birthtime 
+      }),
       headers: { 'Content-Type': 'application/json' }
     })
 
@@ -49,34 +60,120 @@ export default function UserGuideForm() {
     return <div>読み込み中...</div>
   }
 
+  const currentYear = new Date().getFullYear()
+  const years = Array.from({ length: currentYear - 1950 + 1 }, (_, i) => currentYear - i)
+  const months = Array.from({ length: 12 }, (_, i) => i + 1)
+  const days = Array.from({ length: 31 }, (_, i) => i + 1)
   return (
-    <div style={{ padding: '1rem', fontFamily: 'sans-serif' }}>
-      <h2>ユーザー説明書・診断フォーム</h2>
-      <p>こんにちは、{displayName}さん！</p>
+    <>
+      <div className="wrapper" style={{ marginTop: '50px' }}>
+        <div className="banner-header">
+          <h2>
+            <span className="en">What’s Your Fortune?</span>
+            <span className="jp">無料でうらなう</span>
+          </h2>
+        </div>
 
-      <form onSubmit={handleSubmit}>
-        <label>
-          氏名：
-          <input name="name" value={formData.name} onChange={handleChange} required />
-        </label>
-        <br />
-        <label>
-          生年月日：
-          <input type="date" name="birthdate" value={formData.birthdate} onChange={handleChange} required />
-        </label>
-        <br />
-        <label>
-          出生地：
-          <input name="birthplace" value={formData.birthplace} onChange={handleChange} required />
-        </label>
-        <br />
-        <label>
-          出生時間：
-          <input type="time" name="birthtime" value={formData.birthtime} onChange={handleChange} />
-        </label>
-        <br />
-        <button type="submit">診断スタート</button>
-      </form>
-    </div>
+        <form onSubmit={handleSubmit}>
+          <div className="grid-form">
+            <div className="birthdate-form">
+              <label className="form-label">
+                生年月日
+                <span className="required-badge">必須</span>
+              </label>
+              <div className="birthdate-grid">
+                <div className="input-group">
+                  <select
+                    className="birth-select"
+                    name="year"
+                    value={formData.year}
+                    onChange={handleChange}
+                    required
+                  >
+                    <option value="">--</option>
+                    {years.map((y) => (
+                      <option key={y} value={y}>{y}</option>
+                    ))}
+                  </select> 年
+                </div>
+                <div className="input-group">
+                  <select
+                    className="birth-select"
+                    name="month"
+                    value={formData.month}
+                    onChange={handleChange}
+                    required
+                  >
+                    <option value="">--</option>
+                    {months.map((m) => (
+                      <option key={m} value={m}>{m}</option>
+                    ))}
+                  </select> 月
+                </div>
+                <div className="input-group">
+                  <select
+                    className="birth-select"
+                    name="day"
+                    value={formData.day}
+                    onChange={handleChange}
+                    required
+                  >
+                    <option value="">--</option>
+                    {days.map((d) => (
+                      <option key={d} value={d}>{d}</option>
+                    ))}
+                  </select> 日
+                </div>
+              </div>
+            </div>
+
+            <div className="birthdate-form">
+              <label className="form-label">
+                氏名
+                <span className="required-badge">必須</span>
+              </label>
+              <input
+                className="birth-select"
+                name="name"
+                value={formData.name}
+                onChange={handleChange}
+                required
+              />
+            </div>
+
+            <div className="birthdate-form">
+              <label className="form-label">
+                出生地
+                <span className="required-badge">必須</span>
+              </label>
+              <input
+                className="birth-select"
+                name="birthplace"
+                value={formData.birthplace}
+                onChange={handleChange}
+                required
+              />
+            </div>
+
+            <div className="birthdate-form">
+              <label className="form-label">
+                出生時間（任意）
+              </label>
+              <input
+                className="birth-select"
+                type="time"
+                name="birthtime"
+                value={formData.birthtime}
+                onChange={handleChange}
+              />
+            </div>
+          </div>
+
+          <button type="submit" className="submit-btn">
+            無料で占う
+          </button>
+        </form>
+      </div>
+    </>
   )
 }
