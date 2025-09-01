@@ -108,7 +108,7 @@ export default function UserGuideForm() {
 
             <div className="birthdate-form">
               <label className="form-label">出生時間<p style={{ fontSize: '18px' }}>（任意）</p></label>
-              <input className="form-base form-s" type="time" name="birthtime" value={formData.birthtime} onChange={handleChange}/>
+              <input className="form-base form-s" type="text" name="birthtime" value={formData.birthtime} onChange={handleChange} pattern="^([01]\d|2[0-3]):([0-5]\d)$" title="時刻は 00:00 〜 23:59 の形式で入力してください"/>
             </div>
           </div>
 
