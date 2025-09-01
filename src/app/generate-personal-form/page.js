@@ -78,7 +78,7 @@ export default function UserGuideForm() {
     const errors = {}
     if (!formData.name.trim()) errors.name = '入力必須です。'
     if (!formData.year || !formData.month || !formData.day) {
-      errors.birthdate = '生年月日をすべて選択してください'
+      errors.birthdate = '入力必須です。'
     } else if (!isValidDate(formData.year, formData.month, formData.day)) {
       errors.birthdate = '存在しない日付です'
     }
@@ -173,7 +173,7 @@ export default function UserGuideForm() {
 
             <div className="birthdate-form">
               <label className="form-label">出生時間<p style={{ fontSize: '18px' }}>（任意）</p></label>
-              <input className={`form-base form-s ${formErrors.birthtime ? 'input-error' : ''}`} type="text" name="birthtime" value={formData.birthtime} onChange={handleChange} inputMode="numeric" placeholder="12:05" pattern="^([01]\d|2[0-3]):([0-5]\d)$"/>
+              <input className={`form-base form-s ${formErrors.birthtime ? 'input-error' : ''}`} type="text" name="birthtime" value={formData.birthtime} onChange={handleChange} placeholder="12:05" pattern="^([01]\d|2[0-3]):([0-5]\d)$"/>
               {formErrors.birthtime && (
                 <p className="form-error" aria-live="polite" style={{ marginTop: '8px', color: '#d33', fontWeight: 700 }}>
                   {formErrors.birthtime}
