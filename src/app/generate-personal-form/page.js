@@ -39,7 +39,7 @@ export default function UserGuideForm() {
     e.preventDefault()
 
     const birthdate = `${formData.year}-${formData.month}-${formData.day}`
-    const res = await fetch('/api/create-user-guide', {
+    const res = await fetch('/api/generate-personal-form', {
       method: 'POST',
       body: JSON.stringify({ 
         lineId, 
