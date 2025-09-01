@@ -16,6 +16,7 @@ export default function UserGuideForm() {
     birthplace: '',
     birthtime: ''
   })
+  const [formErrors, setFormErrors] = useState({})
 
   useEffect(() => {
     liff.init({ liffId: process.env.NEXT_PUBLIC_LIFF_ID_PERSONAL || '' }).then(() => {
@@ -38,6 +39,18 @@ export default function UserGuideForm() {
   const handleSubmit = async (e) => {
     e.preventDefault()
 
+    const errors = {}
+    if (!formData.name.trim()) errors.name = true
+    if (!formData.year || !formData.month || !formData.day) errors.birthdate = true
+    if (!formData.birthplace.trim()) errors.birthplace = true
+    if (formData.birthtime && !/^([01]\d|2[0-3]):([0-5]\d)$/.test(formData.birthtime)) errors.birthtime = true
+
+    if (Object.keys(errors).length > 0) {
+      setFormErrors(errors)
+      return
+    }
+
+    setFormErrors({}) // エラーがない場合リセット
     const birthdate = `${formData.year}-${formData.month}-${formData.day}`
     const res = await fetch('/api/generate-personal-form', {
       method: 'POST',
@@ -76,19 +89,19 @@ export default function UserGuideForm() {
               <label className="form-label">生年月日<span className="required-badge">必須</span></label>
               <div className="birthdate-grid">
                 <div className="input-group">
-                  <select className="form-base form-select form-s" name="year" value={formData.year} onChange={handleChange} required>
+                  <select className={`form-base form-select form-s ${formErrors.birthdate ? 'input-error' : ''}`} name="year" value={formData.year} onChange={handleChange} required>
                     <option value="">--</option>
                     {years.map((y) => (<option key={y} value={y}>{y}</option>))}
                   </select> 年
                 </div>
                 <div className="input-group">
-                  <select className="form-base form-select form-s" name="month" value={formData.month} onChange={handleChange} required>
+                  <select className={`form-base form-select form-s ${formErrors.birthdate ? 'input-error' : ''}`} name="month" value={formData.month} onChange={handleChange} required>
                     <option value="">--</option>
                     {months.map((m) => (<option key={m} value={m}>{m}</option>))}
                   </select> 月
                 </div>
                 <div className="input-group">
-                  <select className="form-base form-select form-s" name="day" value={formData.day} onChange={handleChange} required>
+                  <select className={`form-base form-select form-s ${formErrors.birthdate ? 'input-error' : ''}`} name="day" value={formData.day} onChange={handleChange} required>
                     <option value="">--</option>
                     {days.map((d) => (<option key={d} value={d}>{d}</option>))}
                   </select> 日
@@ -98,17 +111,17 @@ export default function UserGuideForm() {
 
             <div className="birthdate-form">
               <label className="form-label">氏名<span className="required-badge">必須</span></label>
-              <input className="form-base form-m" name="name" value={formData.name} onChange={handleChange} required/>
+              <input className={`form-base form-m ${formErrors.name ? 'input-error' : ''}`} name="name" value={formData.name} onChange={handleChange} required/>
             </div>
 
             <div className="birthdate-form">
               <label className="form-label">出生地<span className="required-badge">必須</span></label>
-              <input className="form-base form-l" name="birthplace" value={formData.birthplace} onChange={handleChange} placeholder="例：東京都新宿区" required/>
+              <input className={`form-base form-l ${formErrors.birthplace ? 'input-error' : ''}`} name="birthplace" value={formData.birthplace} onChange={handleChange} placeholder="例：東京都新宿区" required/>
             </div>
 
             <div className="birthdate-form">
               <label className="form-label">出生時間<p style={{ fontSize: '18px' }}>（任意）</p></label>
-              <input className="form-base form-s" type="text" name="birthtime" value={formData.birthtime} onChange={handleChange} pattern="^([01]\d|2[0-3]):([0-5]\d)$" title="時刻は 00:00 〜 23:59 の形式で入力してください"/>
+              <input className={`form-base form-s ${formErrors.birthtime ? 'input-error' : ''}`} type="text" name="birthtime" value={formData.birthtime} onChange={handleChange} inputMode="numeric" placeholder="例：12:30" pattern="^([01]\d|2[0-3]):([0-5]\d)$" title="時刻は 00:00 〜 23:59 の形式で入力してください"/>
             </div>
           </div>
 

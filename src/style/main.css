@@ -466,3 +466,8 @@
   transition: .3s;
 }
 .submit-btn:hover {opacity: .85;}
+
+.input-error {
+  border: 2px solid #d33;
+  background-color: #fff0f0;
+}
