@@ -107,7 +107,7 @@ export default function UserGuideForm() {
             </div>
 
             <div className="birthdate-form">
-              <label className="form-label">出生時間<p style="font-size: 18px">（任意）</p></label>
+              <label className="form-label">出生時間<p style={{ fontSize: '18px' }}>（任意）</p></label>
               <input className="form-base form-s" type="time" name="birthtime" value={formData.birthtime} onChange={handleChange}/>
             </div>
           </div>
