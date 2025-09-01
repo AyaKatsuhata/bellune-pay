@@ -76,14 +76,14 @@ export default function UserGuideForm() {
     }
 
     const errors = {}
-    if (!formData.name.trim()) errors.name = true
+    if (!formData.name.trim()) errors.name = '入力必須です。'
     if (!formData.year || !formData.month || !formData.day) {
       errors.birthdate = '生年月日をすべて選択してください'
     } else if (!isValidDate(formData.year, formData.month, formData.day)) {
       errors.birthdate = '存在しない日付です'
     }
-    if (!formData.birthplace.trim()) errors.birthplace = true
-    if (formData.birthtime && !/^([01]\d|2[0-3]):([0-5]\d)$/.test(formData.birthtime)) errors.birthtime = true
+    if (!formData.birthplace.trim()) errors.birthplace = '入力必須です。'
+    if (formData.birthtime && !/^([01]\d|2[0-3]):([0-5]\d)$/.test(formData.birthtime)) errors.birthtime = ':区切りで入力してください。例：12:05'
 
     if (Object.keys(errors).length > 0) {
       setFormErrors(errors)
@@ -154,16 +154,31 @@ export default function UserGuideForm() {
             <div className="birthdate-form">
               <label className="form-label">氏名<span className="required-badge">必須</span></label>
               <input className={`form-base form-m ${formErrors.name ? 'input-error' : ''}`} name="name" value={formData.name} onChange={handleChange} />
+              {formErrors.name && (
+                <p className="form-error" aria-live="polite" style={{ marginTop: '8px', color: '#d33', fontWeight: 700 }}>
+                  {formErrors.name}
+                </p>
+              )}
             </div>
 
             <div className="birthdate-form">
               <label className="form-label">出生地<span className="required-badge">必須</span></label>
               <input className={`form-base form-l ${formErrors.birthplace ? 'input-error' : ''}`} name="birthplace" value={formData.birthplace} onChange={handleChange} placeholder="例：東京都新宿区" />
+              {formErrors.birthplace && (
+                <p className="form-error" aria-live="polite" style={{ marginTop: '8px', color: '#d33', fontWeight: 700 }}>
+                  {formErrors.birthplace}
+                </p>
+              )}
             </div>
 
             <div className="birthdate-form">
               <label className="form-label">出生時間<p style={{ fontSize: '18px' }}>（任意）</p></label>
-              <input className={`form-base form-s ${formErrors.birthtime ? 'input-error' : ''}`} type="text" name="birthtime" value={formData.birthtime} onChange={handleChange} inputMode="numeric" placeholder="12:30" pattern="^([01]\d|2[0-3]):([0-5]\d)$"/>
+              <input className={`form-base form-s ${formErrors.birthtime ? 'input-error' : ''}`} type="text" name="birthtime" value={formData.birthtime} onChange={handleChange} inputMode="numeric" placeholder="12:05" pattern="^([01]\d|2[0-3]):([0-5]\d)$"/>
+              {formErrors.birthtime && (
+                <p className="form-error" aria-live="polite" style={{ marginTop: '8px', color: '#d33', fontWeight: 700 }}>
+                  {formErrors.birthtime}
+                </p>
+              )}
             </div>
           </div>
 
