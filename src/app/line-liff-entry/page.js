@@ -6,7 +6,7 @@ export default function LineLiffEntryPage() {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    const liffId = process.env.NEXT_PUBLIC_LIFF_ID;
+    const liffId = process.env.NEXT_PUBLIC_LIFF_ID_PAY;
     console.log("🔍 LIFF ID:", liffId);
     console.log("🔍 email:", sessionStorage.getItem("email"));
 

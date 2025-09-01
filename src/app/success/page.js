@@ -5,7 +5,7 @@ import { useEffect, useState } from "react";
 
 export default function SuccessPage() {
   const [status, setStatus] = useState("loading");
-  const liffUrl = process.env.NEXT_PUBLIC_LIFF_URL;
+  const liffUrl = process.env.NEXT_PUBLIC_LIFF_URL_PAY;
 
   useEffect(() => {
     const fetchAndRedirect = async () => {

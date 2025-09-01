@@ -12,7 +12,7 @@ export default function LineLoginFallbackPage() {
       <h1>LINE連携中...</h1>
       <p>自動で画面が切り替わらない場合は、下のボタンからLINEログインをお願いします。</p>
       <a
-        href={process.env.NEXT_PUBLIC_LIFF_URL}
+        href={process.env.NEXT_PUBLIC_LIFF_URL_PAY}
         style={{
           display: "inline-block",
           padding: "12px 24px",
