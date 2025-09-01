@@ -34,6 +34,33 @@ export default function UserGuideForm() {
 
   const handleChange = (e) => {
     setFormData({ ...formData, [e.target.name]: e.target.value })
+    if (formErrors.birthdate && (e.target.name === 'year' || e.target.name === 'month' || e.target.name === 'day')) {
+      // Remove birthdate error on change
+      setFormErrors(prev => {
+        const newErrors = { ...prev }
+        delete newErrors.birthdate
+        return newErrors
+      })
+    }
+    if (formErrors[e.target.name]) {
+      setFormErrors(prev => {
+        const newErrors = { ...prev }
+        delete newErrors[e.target.name]
+        return newErrors
+      })
+    }
+  }
+
+  const handleBlur = (e) => {
+    if (formErrors.birthdate && (e.target.name === 'year' || e.target.name === 'month' || e.target.name === 'day')) {
+      if (formData.year && formData.month && formData.day) {
+        setFormErrors(prev => {
+          const newErrors = { ...prev }
+          delete newErrors.birthdate
+          return newErrors
+        })
+      }
+    }
   }
 
   const handleSubmit = async (e) => {
@@ -83,25 +110,43 @@ export default function UserGuideForm() {
         <div className="banner-header">
           <h2><span className="en">What’s Your Fortune?</span></h2>
         </div>
-        <form onSubmit={handleSubmit}>
+        <form onSubmit={handleSubmit} noValidate>
           <div className="grid-form">
             <div className="birthdate-form">
               <label className="form-label">生年月日<span className="required-badge">必須</span></label>
               <div className="birthdate-grid">
                 <div className="input-group">
-                  <select className={`form-base form-select form-s ${formErrors.birthdate ? 'input-error' : ''}`} name="year" value={formData.year} onChange={handleChange} required>
+                  <select
+                    className={`form-base form-select form-s ${formErrors.birthdate ? 'input-error' : ''}`}
+                    name="year"
+                    value={formData.year}
+                    onChange={handleChange}
+                    onBlur={handleBlur}
+                  >
                     <option value="">--</option>
                     {years.map((y) => (<option key={y} value={y}>{y}</option>))}
                   </select> 年
                 </div>
                 <div className="input-group">
-                  <select className={`form-base form-select form-s ${formErrors.birthdate ? 'input-error' : ''}`} name="month" value={formData.month} onChange={handleChange} required>
+                  <select
+                    className={`form-base form-select form-s ${formErrors.birthdate ? 'input-error' : ''}`}
+                    name="month"
+                    value={formData.month}
+                    onChange={handleChange}
+                    onBlur={handleBlur}
+                  >
                     <option value="">--</option>
                     {months.map((m) => (<option key={m} value={m}>{m}</option>))}
                   </select> 月
                 </div>
                 <div className="input-group">
-                  <select className={`form-base form-select form-s ${formErrors.birthdate ? 'input-error' : ''}`} name="day" value={formData.day} onChange={handleChange} required>
+                  <select
+                    className={`form-base form-select form-s ${formErrors.birthdate ? 'input-error' : ''}`}
+                    name="day"
+                    value={formData.day}
+                    onChange={handleChange}
+                    onBlur={handleBlur}
+                  >
                     <option value="">--</option>
                     {days.map((d) => (<option key={d} value={d}>{d}</option>))}
                   </select> 日
@@ -111,12 +156,12 @@ export default function UserGuideForm() {
 
             <div className="birthdate-form">
               <label className="form-label">氏名<span className="required-badge">必須</span></label>
-              <input className={`form-base form-m ${formErrors.name ? 'input-error' : ''}`} name="name" value={formData.name} onChange={handleChange} required/>
+              <input className={`form-base form-m ${formErrors.name ? 'input-error' : ''}`} name="name" value={formData.name} onChange={handleChange} />
             </div>
 
             <div className="birthdate-form">
               <label className="form-label">出生地<span className="required-badge">必須</span></label>
-              <input className={`form-base form-l ${formErrors.birthplace ? 'input-error' : ''}`} name="birthplace" value={formData.birthplace} onChange={handleChange} placeholder="例：東京都新宿区" required/>
+              <input className={`form-base form-l ${formErrors.birthplace ? 'input-error' : ''}`} name="birthplace" value={formData.birthplace} onChange={handleChange} placeholder="例：東京都新宿区" />
             </div>
 
             <div className="birthdate-form">
@@ -130,6 +175,12 @@ export default function UserGuideForm() {
           </button>
         </form>
       </div>
+      <style jsx>{`
+        .input-error {
+          border: 2px solid #d33;
+          background-color: #fff0f0;
+        }
+      `}</style>
     </>
   )
 }
