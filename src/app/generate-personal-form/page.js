@@ -65,6 +65,7 @@ export default function UserGuideForm() {
   const months = Array.from({ length: 12 }, (_, i) => i + 1)
   const days = Array.from({ length: 31 }, (_, i) => i + 1)
   return (
+    <>
       <div className="wrapper" style={{ marginTop: '50px' }}>
         <div className="banner-header">
           <h2><span className="en">What’s Your Fortune?</span></h2>
@@ -116,5 +117,6 @@ export default function UserGuideForm() {
           </button>
         </form>
       </div>
+    </>
   )
 }
