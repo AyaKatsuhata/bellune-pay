@@ -65,115 +65,56 @@ export default function UserGuideForm() {
   const months = Array.from({ length: 12 }, (_, i) => i + 1)
   const days = Array.from({ length: 31 }, (_, i) => i + 1)
   return (
-    <>
       <div className="wrapper" style={{ marginTop: '50px' }}>
         <div className="banner-header">
-          <h2>
-            <span className="en">What’s Your Fortune?</span>
-            <span className="jp">無料でうらなう</span>
-          </h2>
+          <h2><span className="en">What’s Your Fortune?</span></h2>
         </div>
-
         <form onSubmit={handleSubmit}>
           <div className="grid-form">
             <div className="birthdate-form">
-              <label className="form-label">
-                生年月日
-                <span className="required-badge">必須</span>
-              </label>
+              <label className="form-label">生年月日<span className="required-badge">必須</span></label>
               <div className="birthdate-grid">
                 <div className="input-group">
-                  <select
-                    className="birth-select"
-                    name="year"
-                    value={formData.year}
-                    onChange={handleChange}
-                    required
-                  >
+                  <select className="form-base form-select form-s" name="year" value={formData.year} onChange={handleChange} required>
                     <option value="">--</option>
-                    {years.map((y) => (
-                      <option key={y} value={y}>{y}</option>
-                    ))}
+                    {years.map((y) => (<option key={y} value={y}>{y}</option>))}
                   </select> 年
                 </div>
                 <div className="input-group">
-                  <select
-                    className="birth-select"
-                    name="month"
-                    value={formData.month}
-                    onChange={handleChange}
-                    required
-                  >
+                  <select className="form-base form-select form-s" name="month" value={formData.month} onChange={handleChange} required>
                     <option value="">--</option>
-                    {months.map((m) => (
-                      <option key={m} value={m}>{m}</option>
-                    ))}
+                    {months.map((m) => (<option key={m} value={m}>{m}</option>))}
                   </select> 月
                 </div>
                 <div className="input-group">
-                  <select
-                    className="birth-select"
-                    name="day"
-                    value={formData.day}
-                    onChange={handleChange}
-                    required
-                  >
+                  <select className="form-base form-select form-s" name="day" value={formData.day} onChange={handleChange} required>
                     <option value="">--</option>
-                    {days.map((d) => (
-                      <option key={d} value={d}>{d}</option>
-                    ))}
+                    {days.map((d) => (<option key={d} value={d}>{d}</option>))}
                   </select> 日
                 </div>
               </div>
             </div>
 
             <div className="birthdate-form">
-              <label className="form-label">
-                氏名
-                <span className="required-badge">必須</span>
-              </label>
-              <input
-                className="birth-select"
-                name="name"
-                value={formData.name}
-                onChange={handleChange}
-                required
-              />
+              <label className="form-label">氏名<span className="required-badge">必須</span></label>
+              <input className="form-base form-m" name="name" value={formData.name} onChange={handleChange} required/>
             </div>
 
             <div className="birthdate-form">
-              <label className="form-label">
-                出生地
-                <span className="required-badge">必須</span>
-              </label>
-              <input
-                className="birth-select"
-                name="birthplace"
-                value={formData.birthplace}
-                onChange={handleChange}
-                required
-              />
+              <label className="form-label">出生地<span className="required-badge">必須</span></label>
+              <input className="form-base form-l" name="birthplace" value={formData.birthplace} onChange={handleChange} placeholder="例：東京都新宿区" required/>
             </div>
 
             <div className="birthdate-form">
-              <label className="form-label">
-                出生時間（任意）
-              </label>
-              <input
-                className="birth-select"
-                type="time"
-                name="birthtime"
-                value={formData.birthtime}
-                onChange={handleChange}
-              />
+              <label className="form-label">出生時間<p style="font-size: 18px">（任意）</p></label>
+              <input className="form-base form-s" type="time" name="birthtime" value={formData.birthtime} onChange={handleChange}/>
             </div>
           </div>
 
           <button type="submit" className="submit-btn">
-            無料で占う
+            占う
           </button>
         </form>
       </div>
-    </>
   )
 }
