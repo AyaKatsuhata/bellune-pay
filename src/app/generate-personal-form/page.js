@@ -6,7 +6,6 @@ import liff from '@line/liff'
 
 export default function UserGuideForm() {
   const [lineId, setLineId] = useState('')
-  const [displayName, setDisplayName] = useState('')
   const [loading, setLoading] = useState(true)
   const [formData, setFormData] = useState({
     name: '',
@@ -25,7 +24,6 @@ export default function UserGuideForm() {
       } else {
         liff.getProfile().then(profile => {
           setLineId(profile.userId)
-          setDisplayName(profile.displayName)
           setLoading(false)
         })
       }
@@ -96,7 +94,6 @@ export default function UserGuideForm() {
       method: 'POST',
       body: JSON.stringify({ 
         lineId, 
-        displayName, 
         name: formData.name, 
         birthdate, 
         birthplace: formData.birthplace, 
@@ -119,7 +116,12 @@ export default function UserGuideForm() {
   const days = Array.from({ length: 31 }, (_, i) => i + 1)
   return (
     <>
-      <div className="wrapper" style={{ marginTop: '50px' }}>
+      <header>
+        <div className="wrapper nav">
+          <div className="logo">bellune</div>
+        </div>
+      </header>
+      <div className="wrapper" style={{ marginTop: '50px', marginBottom: '50px' }}>
         <div className="banner-header">
           <h2><span className="en">What’s Your Fortune?</span></h2>
         </div>
