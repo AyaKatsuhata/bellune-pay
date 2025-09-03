@@ -74,7 +74,6 @@ export async function POST(req) {
       console.error('Flaskエラー内容:', text)
       return NextResponse.json({ message: '画像生成に失敗しました' }, { status: 500 })
     }
-
     return NextResponse.json({ message: '生成完了', imageUrl: result.imageUrl })
 
   } catch (err) {
