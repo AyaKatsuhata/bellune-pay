@@ -70,6 +70,8 @@ export async function POST(req) {
     const result = await pythonRes.json()
 
     if (!pythonRes.ok) {
+      const text = await pythonRes.text();
+      console.error('Flaskエラー内容:', text)
       return NextResponse.json({ message: '画像生成に失敗しました' }, { status: 500 })
     }
 
