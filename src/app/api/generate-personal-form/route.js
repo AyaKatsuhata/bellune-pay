@@ -47,12 +47,12 @@ export async function POST(req) {
       }
     } catch (err) {
       console.error('GPT JSON parse error:', err)
-      await logger({
-        level: 'error',
-        // lineId: lineId || 'unknown',
-        message: 'GPT JSON parse error:' + err.message,
-        context: { stack: err.stack }
-      })
+      // await logger({
+      //   level: 'error',
+      //   // lineId: lineId || 'unknown',
+      //   message: 'GPT JSON parse error:' + err.message,
+      //   context: { stack: err.stack }
+      // })
     }
 
     const pythonRes = await fetch(process.env.PYTHON_SERVER_URL + '/generate_personal_image', {
@@ -70,24 +70,24 @@ export async function POST(req) {
     if (!pythonRes.ok) {
       const text = await pythonRes.text();
       console.error('Flaskエラー内容:', text)
-      await logger({
-        level: 'error',
-        // lineId: lineId || 'unknown',
-        message: 'Flaskエラー: 画像生成に失敗しました',
-        context: text
-      })
+      // await logger({
+      //   level: 'error',
+      //   // lineId: lineId || 'unknown',
+      //   message: 'Flaskエラー: 画像生成に失敗しました',
+      //   context: text
+      // })
     }
     const result = await pythonRes.json()
     return NextResponse.json({ message: '生成完了', imageUrl: result.imageUrl })
 
   }catch (err) {
     console.error(err)
-    await logger({
-      level: 'error',
-      // lineId: lineId || 'unknown',
-      message: err.message,
-      context: { stack: err.stack }
-    })
+    // await logger({
+    //   level: 'error',
+    //   // lineId: lineId || 'unknown',
+    //   message: err.message,
+    //   context: { stack: err.stack }
+    // })
     return NextResponse.json({ message: 'サーバーエラー' }, { status: 500 })
 }
 }
