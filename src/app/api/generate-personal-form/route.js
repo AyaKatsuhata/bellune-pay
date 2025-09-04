@@ -53,6 +53,8 @@ export async function POST(req) {
       return NextResponse.json({ message: 'GPTのJSONデータが取得できませんでした' }, { status: 500 })
     }
 
+    const pythonServerUrl = process.env.PYTHON_SERVER_URL;
+    console.log("✅ Flask URL:", pythonServerUrl); // ←ここでログ出してみて
     // Flaskに構造化JSONを送信
     const pythonRes = await fetch(process.env.PYTHON_SERVER_URL + '/generate_personal_image', {
       method: 'POST',
