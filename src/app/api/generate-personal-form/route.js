@@ -49,7 +49,7 @@ export async function POST(req) {
       console.error('GPT JSON parse error:', err)
       await logger({
         level: 'error',
-        lineId: lineId,
+        lineId: lineId || 'unknown',
         message: 'GPT JSON parse error:' + err.message,
         context: { stack: err.stack }
       })
@@ -72,7 +72,7 @@ export async function POST(req) {
       console.error('Flaskエラー内容:', text)
       await logger({
         level: 'error',
-        lineId: lineId,
+        lineId: lineId || 'unknown',
         message: 'Flaskエラー: 画像生成に失敗しました',
         context: text
       })
@@ -84,7 +84,7 @@ export async function POST(req) {
     console.error(err)
     await logger({
       level: 'error',
-      lineId: lineId,
+      lineId: lineId || 'unknown',
       message: err.message,
       context: { stack: err.stack }
     })
