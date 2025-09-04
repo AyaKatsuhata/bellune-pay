@@ -2,6 +2,7 @@
 
 import { NextResponse } from 'next/server'
 import OpenAI from 'openai'
+import { logger } from '@/lib/logger'
 
 const openai = new OpenAI({ apiKey: process.env.OPENAI_API_KEY })
 
@@ -41,20 +42,22 @@ export async function POST(req) {
 
     const gptText = gptRes.choices[0]?.message?.content?.trim()
     let gptJson = null
-
     try {
       gptJson = JSON.parse(gptText)
-    } catch (e) {
-      console.error('GPT JSON parse error:', e)
-      return NextResponse.json({ message: 'GPTの出力形式が不正です' }, { status: 500 })
-    }
-
-    if (!gptJson || typeof gptJson !== 'object') {
-      return NextResponse.json({ message: 'GPTのJSONデータが取得できませんでした' }, { status: 500 })
+      if (!gptJson || typeof gptJson !== 'object') {
+        throw new Error('GPTの出力が空またはオブジェクトでありません。')
+      }
+    } catch (err) {
+      console.error('GPT JSON parse error:', err)
+      await logger({
+        level: 'error',
+        lineId: lineId,
+        message: 'GPT JSON parse error:' + err.message,
+        context: { stack: err.stack }
+      })
     }
 
     const pythonServerUrl = process.env.PYTHON_SERVER_URL;
-    console.log("✅ Flask URL:", pythonServerUrl); // ←ここでログ出してみて
     // Flaskに構造化JSONを送信
     const pythonRes = await fetch(process.env.PYTHON_SERVER_URL + '/generate_personal_image', {
       method: 'POST',
@@ -68,18 +71,27 @@ export async function POST(req) {
         lineId
       })
     })
-
-    const result = await pythonRes.json()
-
     if (!pythonRes.ok) {
       const text = await pythonRes.text();
       console.error('Flaskエラー内容:', text)
-      return NextResponse.json({ message: '画像生成に失敗しました' }, { status: 500 })
+      await logger({
+        level: 'error',
+        lineId: lineId,
+        message: 'Flaskエラー: 画像生成に失敗しました',
+        context: text
+      })
     }
+    const result = await pythonRes.json()
     return NextResponse.json({ message: '生成完了', imageUrl: result.imageUrl })
 
-  } catch (err) {
+  }catch (err) {
     console.error(err)
+    await logger({
+      level: 'error',
+      lineId: lineId,
+      message: err.message,
+      context: { stack: err.stack }
+    })
     return NextResponse.json({ message: 'サーバーエラー' }, { status: 500 })
-  }
+}
 }
