@@ -1,5 +1,3 @@
-// /api/generate-personal-form.js
-
 import { NextResponse } from 'next/server'
 import OpenAI from 'openai'
 import { logger } from '@/lib/logger'
@@ -7,11 +5,12 @@ import { logger } from '@/lib/logger'
 const openai = new OpenAI({ apiKey: process.env.OPENAI_API_KEY })
 
 export async function POST(req) {
+  let body = null
+  let lineId = null
   try {
-    const body = await req.json()
+    body = await req.json()
     const { lineId, name, birthdate, birthplace, birthtime } = body
 
-    // ① GPTに投げるプロンプト生成
     const prompt = `以下の情報をもとに、性格や運勢などを含むユーザー説明書をJSON形式で作成してください。
       名前：${name}
       生年月日：${birthdate}
@@ -30,7 +29,6 @@ export async function POST(req) {
       }
       出力はプレーンなJSONオブジェクトのみとし、コメントや説明文を含めないでください。`;
 
-    // GPTレスポンス取得とJSONパースに修正
     const gptRes = await openai.chat.completions.create({
       model: 'gpt-4',
       messages: [
@@ -40,9 +38,9 @@ export async function POST(req) {
       temperature: 0.7
     })
 
-    const gptText = gptRes.choices[0]?.message?.content?.trim()
     let gptJson = null
     try {
+      const gptText = gptRes.choices[0]?.message?.content?.trim()
       gptJson = JSON.parse(gptText)
       if (!gptJson || typeof gptJson !== 'object') {
         throw new Error('GPTの出力が空またはオブジェクトでありません。')
@@ -57,8 +55,6 @@ export async function POST(req) {
       })
     }
 
-    const pythonServerUrl = process.env.PYTHON_SERVER_URL;
-    // Flaskに構造化JSONを送信
     const pythonRes = await fetch(process.env.PYTHON_SERVER_URL + '/generate_personal_image', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
