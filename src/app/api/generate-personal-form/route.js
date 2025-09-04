@@ -8,8 +8,10 @@ export async function POST(req) {
   let body = null
   let lineId = null
   try {
+    console.log('1')
     body = await req.json()
     const { lineId, name, birthdate, birthplace, birthtime } = body
+    console.log('2')
 
     const prompt = `以下の情報をもとに、性格や運勢などを含むユーザー説明書をJSON形式で作成してください。
       名前：${name}
@@ -28,6 +30,7 @@ export async function POST(req) {
         "pattern": "成功のパターン（80〜120文字）"
       }
       出力はプレーンなJSONオブジェクトのみとし、コメントや説明文を含めないでください。`;
+    console.log('3')
 
     const gptRes = await openai.chat.completions.create({
       model: 'gpt-4',
@@ -37,14 +40,17 @@ export async function POST(req) {
       ],
       temperature: 0.7
     })
+    console.log('4')
 
     let gptJson = null
     try {
+    console.log('5')
       const gptText = gptRes.choices[0]?.message?.content?.trim()
       gptJson = JSON.parse(gptText)
       if (!gptJson || typeof gptJson !== 'object') {
         throw new Error('GPTの出力が空またはオブジェクトでありません。')
       }
+    console.log('6')
     } catch (err) {
       console.error('GPT JSON parse error:', err)
       // await logger({
@@ -54,6 +60,7 @@ export async function POST(req) {
       //   context: { stack: err.stack }
       // })
     }
+    console.log('7')
 
     const pythonRes = await fetch(process.env.PYTHON_SERVER_URL + '/generate_personal_image', {
       method: 'POST',
@@ -67,7 +74,9 @@ export async function POST(req) {
         lineId
       })
     })
+    console.log('8')
     if (!pythonRes.ok) {
+    console.log('9')
       const text = await pythonRes.text();
       console.error('Flaskエラー内容:', text)
       // await logger({
@@ -78,6 +87,7 @@ export async function POST(req) {
       // })
     }
     const result = await pythonRes.json()
+    console.log('10')
     return NextResponse.json({ message: '生成完了', imageUrl: result.imageUrl })
 
   }catch (err) {
