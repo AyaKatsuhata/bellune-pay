@@ -56,7 +56,7 @@ export async function POST(req) {
       console.error('GPT JSON parse error:', err)
       await logger({
         level: 'error',
-        // lineId: lineId || 'unknown',
+        lineId: lineId || 'unknown',
         message: 'GPT JSON parse error:' + err.message,
         context: { stack: err.stack }
       })
@@ -84,12 +84,12 @@ export async function POST(req) {
       console.log('9')
       const text = await pythonRes.text();
       console.error('Flaskエラー内容:', text)
-      // await logger({
-      //   level: 'error',
-      //   // lineId: lineId || 'unknown',
-      //   message: 'Flaskエラー: 画像生成に失敗しました',
-      //   context: text
-      // })
+      await logger({
+        level: 'error',
+        lineId: lineId || 'unknown',
+        message: 'Flaskエラー: 画像生成に失敗しました',
+        context: text
+      })
       return NextResponse.json({ message: 'Flaskエラー: 画像生成に失敗しました' }, { status: 500 })
     }
     const result = await pythonRes.json()
@@ -98,12 +98,12 @@ export async function POST(req) {
 
   }catch (err) {
     console.error(err)
-    // await logger({
-    //   level: 'error',
-    //   // lineId: lineId || 'unknown',
-    //   message: err.message,
-    //   context: { stack: err.stack }
-    // })
+    await logger({
+      level: 'error',
+      lineId: lineId || 'unknown',
+      message: err.message,
+      context: { stack: err.stack }
+    })
     return NextResponse.json({ message: 'サーバーエラー' }, { status: 500 })
 }
 }
