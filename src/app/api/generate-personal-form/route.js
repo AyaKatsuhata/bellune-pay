@@ -6,7 +6,6 @@ const openai = new OpenAI({ apiKey: process.env.OPENAI_API_KEY })
 
 export async function POST(req) {
   let body = null
-  let lineId = null
   try {
     console.log('1')
     body = await req.json()
@@ -44,39 +43,43 @@ export async function POST(req) {
 
     let gptJson = null
     try {
-    console.log('5')
+      console.log('5')
       const gptText = gptRes.choices[0]?.message?.content?.trim()
       gptJson = JSON.parse(gptText)
       if (!gptJson || typeof gptJson !== 'object') {
         throw new Error('GPTの出力が空またはオブジェクトでありません。')
       }
-    console.log('6')
+      console.log('6')
     } catch (err) {
       console.error('GPT JSON parse error:', err)
-      // await logger({
-      //   level: 'error',
-      //   // lineId: lineId || 'unknown',
-      //   message: 'GPT JSON parse error:' + err.message,
-      //   context: { stack: err.stack }
-      // })
+      await logger({
+        level: 'error',
+        // lineId: lineId || 'unknown',
+        message: 'GPT JSON parse error:' + err.message,
+        context: { stack: err.stack }
+      })
+      return NextResponse.json({ message: 'GPT JSON parse error' }, { status: 500 })
     }
     console.log('7')
+
+    const resultData = {
+      json: gptJson,
+      name,
+      birthdate,
+      birthplace,
+      birthtime,
+      lineId
+    }
+    console.log('Flask送信データ:', resultData)
 
     const pythonRes = await fetch(process.env.PYTHON_SERVER_URL + '/generate_personal_image', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({
-        ...gptJson,
-        name,
-        birthdate,
-        birthplace,
-        birthtime,
-        lineId
-      })
+      body: JSON.stringify(resultData)
     })
     console.log('8')
     if (!pythonRes.ok) {
-    console.log('9')
+      console.log('9')
       const text = await pythonRes.text();
       console.error('Flaskエラー内容:', text)
       // await logger({
@@ -85,6 +88,7 @@ export async function POST(req) {
       //   message: 'Flaskエラー: 画像生成に失敗しました',
       //   context: text
       // })
+      return NextResponse.json({ message: 'Flaskエラー: 画像生成に失敗しました' }, { status: 500 })
     }
     const result = await pythonRes.json()
     console.log('10')
