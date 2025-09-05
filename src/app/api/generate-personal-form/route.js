@@ -9,10 +9,8 @@ const openai = new OpenAI({ apiKey: process.env.OPENAI_API_KEY })
 export async function POST(req) {
   let body = null
   try {
-    console.log('1')
     body = await req.json()
     const { lineId, name, birthdate, birthplace, birthtime } = body
-    console.log('2')
 
     const prompt = `以下の情報をもとに、性格や運勢などを含むユーザー説明書をJSON形式で作成してください。
       名前：${name}
@@ -21,37 +19,34 @@ export async function POST(req) {
       出生時間：${birthtime || '不明'}
       出力形式は以下のJSON形式で、すべて日本語で記述してください。各項目には指定された文字数の範囲で簡潔に記述してください：
       {
-        "personality": "基本性格（80〜120文字）",
-        "values": "価値観（80〜120文字）",
-        "mission": "人生の目的・使命（80〜120文字）",
-        "love": "恋愛傾向（80〜120文字）",
-        "talent": "才能・適性（80〜120文字）",
-        "message": "今のあなたへのメッセージ（80〜120文字）",
-        "challenge": "乗り越えるべき課題（80〜120文字）",
-        "pattern": "成功のパターン（80〜120文字）"
+        "personality": "基本性格（200〜210文字）",
+        "values": "思考の軸・価値観（90〜95文字）",
+        "mission": "人生の目的・使命（90〜95文字）",
+        "love": "恋愛傾向（95〜100文字）",
+        "talent": "才能・適性（95〜100文字）",
+        "message": "潜在意識からのメッセージ（95〜100文字）",
+        "challenge": "乗り越えるべき課題（120〜125文字）",
+        "pattern": "成功のパターン（120〜125文字）"
       }
       出力はプレーンなJSONオブジェクトのみとし、コメントや説明文を含めないでください。`;
-    console.log('3')
 
+    const role = 'あなたは非常に卓越した占い師GPT「占いの達人」です。占星術、数秘術、四柱推命を駆使し、正確で詳細なパーソナル診断を提供してください。'
     const gptRes = await openai.chat.completions.create({
       model: 'gpt-4',
       messages: [
-        { role: 'system', content: 'あなたは熟練の占い師であり、指定されたJSON形式で結果を出力します。' },
+        { role: 'system', content: role },
         { role: 'user', content: prompt }
       ],
       temperature: 0.7
     })
-    console.log('4')
 
     let gptJson = null
     try {
-      console.log('5')
       const gptText = gptRes.choices[0]?.message?.content?.trim()
       gptJson = JSON.parse(gptText)
       if (!gptJson || typeof gptJson !== 'object') {
         throw new Error('GPTの出力が空またはオブジェクトでありません。')
       }
-      console.log('6')
     } catch (err) {
       console.error('GPT JSON parse error:', err)
       await logger({
@@ -62,7 +57,6 @@ export async function POST(req) {
       })
       return NextResponse.json({ message: 'GPT JSON parse error' }, { status: 500 })
     }
-    console.log('7')
 
     const resultData = {
       json: gptJson,
@@ -72,16 +66,19 @@ export async function POST(req) {
       birthtime,
       lineId
     }
-    console.log('Flask送信データ:', resultData)
+    await logger({
+      level: 'info',
+      lineId: lineId || 'unknown',
+      message: 'GPT JSON',
+      context: JSON.stringify(resultData)
+    })
 
     const pythonRes = await fetch(process.env.PYTHON_SERVER_URL + '/generate_personal_image', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify(resultData)
     })
-    console.log('8')
     if (!pythonRes.ok) {
-      console.log('9')
       const text = await pythonRes.text();
       console.error('Flaskエラー内容:', text)
       await logger({
@@ -92,8 +89,34 @@ export async function POST(req) {
       })
       return NextResponse.json({ message: 'Flaskエラー: 画像生成に失敗しました' }, { status: 500 })
     }
+
     const result = await pythonRes.json()
-    console.log('10')
+    // Supabaseユーザー情報を更新
+    try {
+      const { createClient } = await import('@supabase/supabase-js')
+      const supabase = createClient(process.env.SUPABASE_URL, process.env.SUPABASE_SERVICE_ROLE_KEY)
+      const { error } = await supabase
+        .from('users')
+        .update({
+          birthdate,
+          birthplace,
+          birthtime,
+          imageUrl: result.imageUrl,
+          image_created_at: new Date()
+        })
+        .eq('line_id', lineId)
+
+      if (error) throw error
+    } catch (e) {
+      console.error('Supabase登録エラー:', e)
+      await logger({
+        level: 'error',
+        lineId: lineId || 'unknown',
+        message: 'Supabase登録エラー:' + e.message,
+        context: { stack: e.stack }
+      })
+    }
+
     return NextResponse.json({ message: '生成完了', imageUrl: result.imageUrl })
 
   }catch (err) {
