@@ -31,7 +31,7 @@ export async function POST(req) {
       出力はプレーンなJSONオブジェクトのみとし、コメントや説明文を含めないでください。`;
 
     const role = 'あなたは非常に卓越した占い師GPT「占いの達人」です。占星術、数秘術、四柱推命を駆使し、正確で詳細なパーソナル診断を提供してください。'
-    const gptRes = await openai.chat.completions.create({
+    const gptRes = await openai.responses.create({
       model: 'gpt-4',
       messages: [
         { role: 'system', content: role },
