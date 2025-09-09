@@ -39,6 +39,12 @@ export async function POST(req) {
       ],
       temperature: 0.7
     })
+    await logger({
+      level: 'info',
+      lineId: lineId || 'unknown',
+      message: 'GPT Prompt:',
+      context: gptRes.output_text
+    })
 
     let gptJson = null
     try {
