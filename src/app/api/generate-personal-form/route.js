@@ -20,15 +20,9 @@ export async function POST(req) {
     const gptRes = await client.responses.create({
       prompt: {
         id: "pmpt_68c0f9d6c28c81909fb8768a4c8a12690a9a7ee3b5596b95",
-        version: "3"
+        version: "4"
       },
       input: inputText
-    })
-    await logger({
-      level: 'info',
-      lineId: lineId || 'unknown',
-      message: 'GPT Prompt',
-      context: gptRes.output_text
     })
 
     let gptJson = null
