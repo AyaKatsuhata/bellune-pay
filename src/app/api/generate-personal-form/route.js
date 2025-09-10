@@ -20,7 +20,7 @@ export async function POST(req) {
     const gptRes = await client.responses.create({
       prompt: {
         id: "pmpt_68c0f9d6c28c81909fb8768a4c8a12690a9a7ee3b5596b95",
-        version: "2"
+        version: "3"
       },
       input: inputText
     })
