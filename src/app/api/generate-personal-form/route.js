@@ -12,17 +12,17 @@ export async function POST(req) {
     body = await req.json()
     const { lineId, name, birthdate, birthplace, birthtime } = body
 
+    const inputText = `
+      名前: ${name}
+      生年月日: ${birthdate}
+      出生地: ${birthplace}
+      出生時間: ${birthtime || '不明'}`
     const gptRes = await client.responses.create({
       prompt: {
         id: "pmpt_68c0f9d6c28c81909fb8768a4c8a12690a9a7ee3b5596b95",
         version: "2"
       },
-      input: {
-        "name": name,
-        "birthdate": birthdate,
-        "birthplace": birthplace,
-        "birthtime": birthtime || '不明'
-      }
+      input: inputText
     })
     await logger({
       level: 'info',
