@@ -4,7 +4,7 @@ import { NextResponse } from 'next/server'
 import OpenAI from 'openai'
 import { logger } from '@/lib/logger'
 
-const openai = new OpenAI({ apiKey: process.env.OPENAI_API_KEY })
+const client = new OpenAI({ apiKey: process.env.OPENAI_API_KEY })
 
 export async function POST(req) {
   let body = null
@@ -12,43 +12,28 @@ export async function POST(req) {
     body = await req.json()
     const { lineId, name, birthdate, birthplace, birthtime } = body
 
-    const prompt = `以下の情報をもとに、性格や運勢などを含むユーザー説明書をJSON形式で作成してください。
-      名前：${name}
-      生年月日：${birthdate}
-      出生地：${birthplace}
-      出生時間：${birthtime || '不明'}
-      出力形式は以下のJSON形式で、すべて日本語で記述してください。各項目には指定された文字数の範囲で簡潔に記述してください：
-      {
-        "personality": "基本性格（200〜210文字）",
-        "values": "思考の軸・価値観（90〜95文字）",
-        "mission": "人生の目的・使命（90〜95文字）",
-        "love": "恋愛傾向（95〜100文字）",
-        "talent": "才能・適性（95〜100文字）",
-        "message": "潜在意識からのメッセージ（95〜100文字）",
-        "challenge": "乗り越えるべき課題（120〜125文字）",
-        "pattern": "成功のパターン（120〜125文字）"
+    const gptRes = await client.responses.create({
+      prompt: {
+        id: "pmpt_68c0f9d6c28c81909fb8768a4c8a12690a9a7ee3b5596b95",
+        version: "2"
+      },
+      input: {
+        "name": name,
+        "birthdate": birthdate,
+        "birthplace": birthplace,
+        "birthtime": birthtime || '不明'
       }
-      出力はプレーンなJSONオブジェクトのみとし、コメントや説明文を含めないでください。`;
-
-    const role = 'あなたは非常に卓越した占い師GPT「占いの達人」です。占星術、数秘術、四柱推命を駆使し、正確で詳細なパーソナル診断を提供してください。'
-    const gptRes = await openai.chat.completions.create({
-      model: 'gpt-4',
-      messages: [
-        { role: 'system', content: role },
-        { role: 'user', content: prompt }
-      ],
-      temperature: 0.7
     })
     await logger({
       level: 'info',
       lineId: lineId || 'unknown',
-      message: 'GPT Prompt:',
-      context: gptRes.choices[0].message.content ,
+      message: 'GPT Prompt',
+      context: gptRes.output_text
     })
 
     let gptJson = null
     try {
-      const gptText = gptRes.choices[0]?.message?.content?.trim()
+      const gptText = gptRes.output_text?.trim()
       gptJson = JSON.parse(gptText)
       if (!gptJson || typeof gptJson !== 'object') {
         throw new Error('GPTの出力が空またはオブジェクトでありません。')
