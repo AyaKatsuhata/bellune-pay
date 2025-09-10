@@ -28,6 +28,12 @@ export async function POST(req) {
     let gptJson = null
     try {
       const gptText = gptRes.output_text?.trim()
+      await logger({
+        level: 'info',
+        lineId: lineId || 'unknown',
+        message: 'GPT Prompt',
+        context: gptRes.output_text
+      })
       gptJson = JSON.parse(gptText)
       if (!gptJson || typeof gptJson !== 'object') {
         throw new Error('GPTの出力が空またはオブジェクトでありません。')
