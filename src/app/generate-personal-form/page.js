@@ -18,16 +18,39 @@ export default function GeneratePersonalForm() {
   const [formErrors, setFormErrors] = useState({})
 
   useEffect(() => {
-    liff.init({ liffId: process.env.NEXT_PUBLIC_LIFF_ID_PERSONAL || '' }).then(() => {
+    const initLiff = async () => {
+      await liff.init({ liffId: process.env.NEXT_PUBLIC_LIFF_ID_PERSONAL || '' })
       if (!liff.isLoggedIn()) {
         liff.login()
       } else {
-        liff.getProfile().then(profile => {
-          setLineId(profile.userId)
-          setLoading(false)
+        const profile = await liff.getProfile()
+        setLineId(profile.userId)
+        const { data, error } = await supabase
+          .from('users')
+          .select('imageUrl')
+          .eq('line_id', profile.userId)
+          .single()
+
+        await fetch('/api/logger', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            controller: 'generate-personal-form',
+            level: 'info',
+            lineId: profile.userId,
+            message: 'Duplication check',
+            context: data.imageUrl
+          })
         })
+
+        if (data?.imageUrl) {
+          router.push('/generate-personal-already')
+          return
+        }
+        setLoading(false)
       }
-    })
+    }
+    initLiff()
   }, [])
 
   const handleChange = (e) => {

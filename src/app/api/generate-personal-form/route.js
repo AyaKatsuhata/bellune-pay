@@ -29,6 +29,7 @@ export async function POST(req) {
     try {
       const gptText = gptRes.output_text?.trim()
       await logger({
+        controller: 'generate-personal-form',
         level: 'info',
         lineId: lineId || 'unknown',
         message: 'GPT Prompt',
@@ -41,6 +42,7 @@ export async function POST(req) {
     } catch (err) {
       console.error('GPT JSON parse error:', err)
       await logger({
+        controller: 'generate-personal-form',
         level: 'error',
         lineId: lineId || 'unknown',
         message: 'GPT JSON parse error:' + err.message,
@@ -58,6 +60,7 @@ export async function POST(req) {
       lineId
     }
     await logger({
+      controller: 'generate-personal-form',
       level: 'info',
       lineId: lineId || 'unknown',
       message: 'GPT JSON',
@@ -73,6 +76,7 @@ export async function POST(req) {
       const text = await pythonRes.text();
       console.error('Flaskエラー内容:', text)
       await logger({
+        controller: 'generate-personal-form',
         level: 'error',
         lineId: lineId || 'unknown',
         message: 'Flaskエラー: 画像生成に失敗しました',
@@ -101,6 +105,7 @@ export async function POST(req) {
     } catch (e) {
       console.error('Supabase登録エラー:', e)
       await logger({
+        controller: 'generate-personal-form',
         level: 'error',
         lineId: lineId || 'unknown',
         message: 'Supabase登録エラー:' + e.message,
@@ -113,6 +118,7 @@ export async function POST(req) {
   }catch (err) {
     console.error(err)
     await logger({
+      controller: 'generate-personal-form',
       level: 'error',
       lineId: lineId || 'unknown',
       message: err.message,
