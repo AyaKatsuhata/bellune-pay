@@ -315,7 +315,7 @@
   background-color: #fff;
   border-radius: 20px;
   padding: 40px;
-  margin: 40px auto;
+  margin: 20px auto;
   max-width: 1120px;
   position: relative;
 
@@ -335,6 +335,15 @@
 .form-label {
   font-weight: bold;
   font-size: 24px;
+  margin-bottom: 30px;
+  display: flex;
+  align-items: center;
+  gap: 18px;
+}
+
+.form-sub-label {
+  font-weight: bold;
+  font-size: 16px;
   margin-bottom: 30px;
   display: flex;
   align-items: center;

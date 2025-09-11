@@ -4,7 +4,7 @@ import '@/style/main.css'
 import { useEffect, useState } from 'react'
 import liff from '@line/liff'
 
-export default function UserGuideForm() {
+export default function GeneratePersonalForm() {
   const [lineId, setLineId] = useState('')
   const [loading, setLoading] = useState(true)
   const [formData, setFormData] = useState({
@@ -116,15 +116,7 @@ export default function UserGuideForm() {
   const days = Array.from({ length: 31 }, (_, i) => i + 1)
   return (
     <>
-      <header>
-        <div className="wrapper nav">
-          <div className="logo">bellune</div>
-        </div>
-      </header>
-      <div className="wrapper" style={{ marginTop: '50px', marginBottom: '50px' }}>
-        <div className="banner-header">
-          <h2><span className="en">What’s Your Fortune?</span></h2>
-        </div>
+      <div className="wrapper" style={{ marginBottom: '50px' }}>
         <form onSubmit={handleSubmit} noValidate>
           <div className="grid-form">
             <div className="birthdate-form">
