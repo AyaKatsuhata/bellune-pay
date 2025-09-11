@@ -4,7 +4,7 @@ import '@/style/main.css'
 import { useEffect, useState } from 'react'
 import liff from '@line/liff'
 import { useRouter } from 'next/navigation'
-import { isGeneratedImg } from '@/api/generate-personal-form'
+import { isGeneratedImg } from '@/app/api/generate-personal-form'
 
 export default function GeneratePersonalForm() {
   const [lineId, setLineId] = useState('')
