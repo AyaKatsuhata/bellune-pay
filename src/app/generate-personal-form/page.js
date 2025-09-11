@@ -31,17 +31,31 @@ export default function GeneratePersonalForm() {
           .eq('line_id', profile.userId)
           .single()
 
-        await fetch('/api/logger', {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({
-            controller: 'generate-personal-form',
-            level: 'info',
-            lineId: profile.userId,
-            message: 'Duplication check',
-            context: data.imageUrl
+        if(error){
+          await fetch('/api/logger', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+              controller: 'generate-personal-form',
+              level: 'error',
+              lineId: profile.userId,
+              message: `Duplication check: ${error.message}`,
+              context: { stack: error.toString() }
+            })
           })
-        })
+        }else{
+          await fetch('/api/logger', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+              controller: 'generate-personal-form',
+              level: 'info',
+              lineId: profile.userId,
+              message: 'Duplication check',
+              context: data.imageUrl
+            })
+          })
+        }
 
         if (data?.imageUrl) {
           router.push('/generate-personal-already')
