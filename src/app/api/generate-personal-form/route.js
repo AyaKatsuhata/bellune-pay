@@ -127,3 +127,35 @@ export async function POST(req) {
     return NextResponse.json({ message: 'サーバーエラー' }, { status: 500 })
 }
 }
+
+export async function isGeneratedImg({ lineId }) {
+  try {
+    const { createClient } = await import('@supabase/supabase-js')
+    const supabase = createClient(process.env.SUPABASE_URL, process.env.SUPABASE_SERVICE_ROLE_KEY)
+    const { error } = await supabase
+      .from('users')
+      .select('imageUrl')
+      .eq('line_id', lineId)
+      .single()
+    if (error) throw error
+    await logger({
+      controller: 'generate-personal-form',
+      level: 'info',
+      lineId: lineId,
+      message: 'Duplication check',
+      context: data.imageUrl
+    })
+    return true
+
+  } catch (e) {
+    console.error('Duplication check:', e)
+    await logger({
+      controller: 'generate-personal-form',
+      level: 'error',
+      lineId: lineId,
+      message: 'Duplication check: ' + e.message,
+      context: { stack: e.stack }
+    })
+    return false
+  }
+}

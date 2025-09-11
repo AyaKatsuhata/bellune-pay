@@ -3,6 +3,8 @@
 import '@/style/main.css'
 import { useEffect, useState } from 'react'
 import liff from '@line/liff'
+import { useRouter } from 'next/navigation'
+import { isGeneratedImg } from '@/api/generate-personal-form'
 
 export default function GeneratePersonalForm() {
   const [lineId, setLineId] = useState('')
@@ -17,6 +19,7 @@ export default function GeneratePersonalForm() {
   })
   const [formErrors, setFormErrors] = useState({})
 
+  const router = useRouter()
   useEffect(() => {
     const initLiff = async () => {
       await liff.init({ liffId: process.env.NEXT_PUBLIC_LIFF_ID_PERSONAL || '' })
@@ -25,39 +28,9 @@ export default function GeneratePersonalForm() {
       } else {
         const profile = await liff.getProfile()
         setLineId(profile.userId)
-        const { data, error } = await supabase
-          .from('users')
-          .select('imageUrl')
-          .eq('line_id', profile.userId)
-          .single()
 
-        if(error){
-          await fetch('/api/logger', {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({
-              controller: 'generate-personal-form',
-              level: 'error',
-              lineId: profile.userId,
-              message: `Duplication check: ${error.message}`,
-              context: { stack: error.toString() }
-            })
-          })
-        }else{
-          await fetch('/api/logger', {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({
-              controller: 'generate-personal-form',
-              level: 'info',
-              lineId: profile.userId,
-              message: 'Duplication check',
-              context: data.imageUrl
-            })
-          })
-        }
-
-        if (data?.imageUrl) {
+        const is_generated = await isGeneratedImg(profile.userId)
+        if (is_generated) {
           router.push('/generate-personal-already')
           return
         }
