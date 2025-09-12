@@ -4,7 +4,6 @@ import '@/style/main.css'
 import { useEffect, useState } from 'react'
 import liff from '@line/liff'
 import { useRouter } from 'next/navigation'
-import { isGeneratedImg } from '../../api/generate-personal-form'
 
 export default function GeneratePersonalForm() {
   const [lineId, setLineId] = useState('')
@@ -29,10 +28,17 @@ export default function GeneratePersonalForm() {
         const profile = await liff.getProfile()
         setLineId(profile.userId)
 
-        const is_generated = await isGeneratedImg(profile.userId)
-        if (is_generated) {
+        const res = await fetch('/api/generate-personal-form', {
+          method: 'POST',
+          body: JSON.stringify({ 
+            mode: 'check',
+            lineId: profile.userId 
+          }),
+          headers: { 'Content-Type': 'application/json' },
+        })
+        const result = await res.json()
+        if (result) {
           router.push('/generate-personal-already')
-          return
         }
         setLoading(false)
       }
@@ -102,12 +108,13 @@ export default function GeneratePersonalForm() {
     const birthdate = `${formData.year}-${formData.month}-${formData.day}`
     const res = await fetch('/api/generate-personal-form', {
       method: 'POST',
-      body: JSON.stringify({ 
-        lineId, 
-        name: formData.name, 
-        birthdate, 
-        birthplace: formData.birthplace, 
-        birthtime: formData.birthtime 
+      body: JSON.stringify({
+        mode: null,
+        lineId,
+        name: formData.name,
+        birthdate,
+        birthplace: formData.birthplace,
+        birthtime: formData.birthtime
       }),
       headers: { 'Content-Type': 'application/json' }
     })
