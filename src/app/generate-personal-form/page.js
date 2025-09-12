@@ -37,7 +37,7 @@ export default function GeneratePersonalForm() {
           headers: { 'Content-Type': 'application/json' },
         })
         const result = await res.json()
-        if (result) {
+        if (result.flg) {
           router.push('/generate-personal-already')
         }
         setLoading(false)

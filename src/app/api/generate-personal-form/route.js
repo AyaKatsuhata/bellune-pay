@@ -27,7 +27,7 @@ export async function POST(req) {
           message: 'Duplication check',
           context: data.imageUrl
         })
-        return true
+        return NextResponse.json({ flg: true })
 
       } catch (e) {
         console.error('Duplication check:', e)
@@ -38,7 +38,7 @@ export async function POST(req) {
           message: 'Duplication check: ' + e.message,
           context: { stack: e.stack }
         })
-        return false
+        return NextResponse.json({ flg: false })
       }
 
     } else {
@@ -158,5 +158,5 @@ export async function POST(req) {
       context: { stack: err.stack }
     })
     return NextResponse.json({ message: 'サーバーエラー' }, { status: 500 })
-}
+  }
 }
